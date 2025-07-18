@@ -1,11 +1,9 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $url = $_POST["url"];
-    $type = $_POST["type"];
+    $url = escapeshellarg($_POST["url"]);
 
-    // شغّل البوت
-    $command = "python3 bot.py \"$url\" \"$type\"";
-    $output = shell_exec($command);
+    // تشغيل البوت مع الرابط
+    $output = shell_exec("python3 bot.py $url");
 
     echo "<pre>$output</pre>";
 }
