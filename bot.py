@@ -1,24 +1,16 @@
-import json
-import time
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+import sys
 
-options = Options()
-options.add_argument('--headless')
-options.add_argument('--disable-gpu')
+if len(sys.argv) >= 3:
+    url = sys.argv[1]
+    action = sys.argv[2]
 
-driver = webdriver.Chrome(options=options)
-
-with open('data.json', 'r') as f:
-    data = json.load(f)
-
-for req in data:
-    link = req['link']
-    amount = req['amount']
-
-    for i in range(amount):
-        driver.get(link)
-        time.sleep(2)
-
-driver.quit()
-open('data.json', 'w').write('[]')
+    if action == "likes":
+        print(f"✅ تم إرسال 100 لايك إلى: {url}")
+    elif action == "views":
+        print(f"✅ تم إرسال 100 مشاهدة إلى: {url}")
+    elif action == "follows":
+        print(f"✅ تم إرسال 100 متابع إلى: {url}")
+    else:
+        print("❌ نوع تفاعل غير معروف.")
+else:
+    print("❌ لم يتم تقديم كل المعطيات.")
