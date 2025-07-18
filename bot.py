@@ -3,40 +3,33 @@ import requests
 import random
 import time
 
-url = sys.argv[1]
-action = sys.argv[2]
+# رابط الفيديو
+url = sys.argv[1] if len(sys.argv) > 1 else ""
 
-headers_list = [
-    {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-        "Referer": "https://www.google.com/"
-    },
-    {
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X)",
-        "Referer": "https://www.bing.com/"
-    },
-    {
-        "User-Agent": "Mozilla/5.0 (Linux; Android 10)",
-        "Referer": "https://duckduckgo.com/"
-    }
+# متصفحات وهمية مختلفة
+user_agents = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X)",
+    "Mozilla/5.0 (Linux; Android 10)",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+    "Mozilla/5.0 (X11; Linux x86_64)"
 ]
 
-if action == "views":
-    print("🔁 نرسل مشاهدات إلى:", url)
-    for i in range(100):
-        headers = random.choice(headers_list)
-        try:
-            response = requests.get(url, headers=headers)
-            print(f"✅ مشاهدة رقم {i+1} - {response.status_code}")
-            time.sleep(0.5)
-        except Exception as e:
-            print(f"❌ خطأ: {e}")
+print(f"\n📺 إرسال 100 مشاهدة إلى:\n{url}\n")
 
-elif action == "likes":
-    print("❗ لا يمكن إرسال لايكات حقيقية بدون تسجيل دخول")
+# تكرار 100 مرة
+for i in range(100):
+    headers = {
+        "User-Agent": random.choice(user_agents)
+    }
 
-elif action == "followers":
-    print("❗ لا يمكن إرسال متابعين حقيقيين بدون حسابات TikTok")
-
-else:
-    print("❗ التفاعل غير مدعوم حالياً")
+    try:
+        r = requests.get(url, headers=headers, timeout=5)
+        if r.status_code == 200:
+            print(f"✅ مشاهدة {i+1} تم إرسالها.")
+        else:
+            print(f"⚠️ فشل في الطلب {i+1}")
+    except Exception as e:
+        print(f"❌ خطأ في الطلب {i+1}: {e}")
+    
+    time.sleep(random.uniform(0.5, 1.5))  # تأخير بسيط لتجنب الحظر
